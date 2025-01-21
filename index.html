@@ -1,0 +1,359 @@
+<!doctype html>
+<meta charset="UTF-8" />
+<html>
+    <head>
+        <title>CONL</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <style>
+            @font-face {
+                font-family: "IBM Plex Mono";
+                src: url("./fonts/IBMPlexMono-Regular.ttf") format("truetype");
+                font-weight: normal;
+                font-style: normal;
+                size-adjust: 91%;
+            }
+            @font-face {
+                font-family: "IBM Plex Sans";
+                src: url("./fonts/IBMPlexSans-Regular.ttf") format("truetype");
+                font-weight: normal;
+                font-style: normal;
+            }
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+            html {
+                font-size: 18px;
+                font-family: sans-serif;
+                --line-height: 1.4rem;
+                --foreground: #130d02;
+                --background: #ffffff;
+            }
+            @media (prefers-color-scheme: dark) {
+                html {
+                    --foreground: #c3cdc2;
+                    --background: #151312;
+                }
+            }
+
+            body {
+                color: var(--foreground);
+                background-color: var(--background);
+
+                font-family: "IBM Plex Sans", sans-serif;
+                /* background-image: linear-gradient(
+                        to bottom,
+                        rgba(0, 0, 0, 0.1) 0%,
+                        rgba(0, 0, 0, 0.1) 1px,
+                        transparent 1px
+                    ),
+                    linear-gradient(
+                        to right,
+                        rgba(0, 0, 0, 0.1) 0%,
+                        rgba(0, 0, 0, 0.1) 1px,
+                        transparent 1px
+                    );
+                background-size: calc(var(--line-height) / 2)
+                    calc(var(--line-height) / 2);
+                background-position: 4px 4px; */
+            }
+            svg path {
+                fill: var(--foreground);
+            }
+            content {
+                display: block;
+                padding-top: calc(var(--line-height) * 2);
+                margin-left: var(--line-height);
+                max-width: 60ch;
+            }
+            footer {
+                border-top: 2px solid var(--foreground);
+                margin-top: calc(var(--line-height) - 2px);
+                text-align: center;
+                font-size: 0.8rem;
+                padding-bottom: calc(var(--line-height) * 2);
+            }
+            p,
+            pre,
+            ul,
+            footer,
+            h2 {
+                padding-left: 1rem;
+                padding-top: calc((var(--line-height) - 1cap) / 2);
+                padding-bottom: calc(
+                    var(--line-height) / 2 - ((var(--line-height) - 1cap) / 2)
+                );
+                line-height: var(--line-height);
+                letter-spacing: 0.02em;
+                overflow-x: auto;
+            }
+            h1 {
+                font-family: "IBM Plex Mono", monospace;
+                height: calc(2px + var(--line-height) * 2);
+                padding-left: calc(1rem - 1px);
+                padding-top: calc(2px + (var(--line-height) - 1cap) / 2);
+                margin-bottom: calc(0px - ((var(--line-height) - 1cap) / 2));
+                font-size: 2rem;
+
+                border-top: 2px solid var(--foreground);
+                margin-top: -2px;
+            }
+            h1 a {
+                float: right;
+                padding-right: 2px;
+            }
+            h2 {
+                font-family: "IBM Plex Mono", monospace;
+                font-size: 1.5rem;
+                padding-top: calc(
+                    var(--line-height) + (var(--line-height) - 1cap) / 2
+                );
+                padding-bottom: calc(
+                    var(--line-height) - ((var(--line-height) - 1cap) / 2)
+                );
+            }
+            a {
+                color: #32b1d7;
+                text-decoration: none;
+            }
+            pre::before {
+                content: "";
+                position: absolute;
+                height: calc(100% - var(--line-height) + 2px);
+                top: calc(var(--line-height) / 2);
+                left: 0px;
+                border-left: 2px solid #32b1d7;
+            }
+            pre {
+                position: relative;
+                font-family: "IBM Plex Mono", monospace;
+                letter-spacing: initial;
+                padding-left: 1rem;
+                /* margin-bottom: calc(var(--line-height) / 2); */
+                /* margin-top: calc(var(--line-height) / 2); */
+                width: 45ch;
+            }
+            ul {
+                margin-top: calc(0rem - var(--line-height));
+                list-style: none;
+            }
+            li {
+                position: relative;
+                padding-left: 1.2rem;
+                margin-top: calc(var(--line-height) / 2);
+            }
+            ul li::before {
+                content: "=";
+                font-family: "IBM Plex Mono", monospace;
+                font-size: 1em;
+                position: absolute;
+                left: 0;
+                top: -1px;
+                font-size: 1.2em;
+            }
+
+            pre comment {
+                color: #888;
+            }
+            pre escape {
+                color: #d6a23f;
+            }
+            pre key {
+                color: #a460cc;
+            }
+            pre value {
+                color: #61a834;
+            }
+        </style>
+    </head>
+    <body>
+        <content>
+            <h1>
+                CONL
+
+                <a href="https://github.com/ConradIrwin/conl" target="_blank">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        alt="Github Project"
+                    >
+                        <path
+                            d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"
+                        />
+                    </svg>
+                </a>
+            </h1>
+
+            <p>
+                CONL is a post-minimal format for configuration files. It is
+                <nobr>easy to read,</nobr> <nobr>easy to edit,</nobr> and
+                <nobr>easy to parse</nobr>.
+            </p>
+            <p>
+                CONL provides a standard data model of maps, lists and scalars;
+                uses indentation to define structure; and defers type-assignment
+                to parse time.
+            </p>
+
+            <pre>
+<comment>; a conl document defines key value pairs
+; values are usually scalars</comment>
+<key>port</key> = <value>8080</value>
+
+<comment>; but can also be lists of values</comment>
+<key>watch_directories</key>
+  = <value>~/go</value>
+  = <value>~/rust</value>
+
+<comment>; or maps of keys to values</comment>
+<key>env</key>
+  <key>REGION</key> = <value>us-east1</value>
+  <key>QUEUE_NAME</key> = <value>example-queue</value>
+
+<comment>; multiline scalars work like markdown
+; with an optional syntax hint</comment>
+<key>init_script</key> = """<hint>bash</hint>
+  <comment>#!/usr/bin/env bash</comment>
+  <key>echo</key> <value>"hello world!"</value></pre>
+
+            <p>
+                In CONL there is no special syntax for numbers or booleans.
+                Instead the parser interprets the scalar as required by the
+                context. This avoids the need for quotes around strings in TOML,
+                and the "Norway" problem in YAML. It also makes it fluent to
+                define units alongside your numbers.
+            </p>
+
+            <p>
+                Scalars may be quoted, but this is discouraged and is rarely
+                needed in practice. For example the empty scalar is represented
+                as "". The quote marks do not affect the type of the scalar.
+            </p>
+
+            <pre>
+<comment>; keys and values can contain anything
+; except ; (and = for keys).</comment>
+<key>welcome message</key> = <value>Whatcha "%n"!</value>
+
+<comment>; types are deferred until parse time;
+; the app knows what it wants.</comment>
+<key>enabled</key> = <value>yes</value>
+<key>country_code</key> = <value>no</value>
+
+<comment>; units are encouraged for numeric values</comment>
+<key>timeout</key> = <value>500ms</value>
+
+<comment>; if you need an empty string or
+; escape sequences, use quotes.</comment>
+<key>empty_string</key> = <value>""</value>
+<key>indent</key> = <value>"<escape>\t</escape>"</value>
+
+<comment>; the following escape sequences
+; work inside quoted literals</comment>
+<key>escape_sequences</key>
+  = <value>"<escape>\\</escape>"</value> <comment>; '\'</comment>
+  = <value>"<escape>\"</escape>"</value> <comment>; '"'</comment>
+  = <value>"<escape>\t</escape>"</value> <comment>; tab</comment>
+  = <value>"<escape>\n</escape>"</value> <comment>; newline</comment>
+  = <value>"<escape>\r</escape>"</value> <comment>; carriage return</comment>
+  = <value>"<escape>\{1F321}</escape>"</value> <comment>; 🐱 (or any codepoint)</comment>
+</pre>
+
+            <p>
+                CONL uses indentation for structure to make it trivial to
+                comment out sections of the document. This also avoids needing
+                to balance braces or brackets as in JSON. The rules around
+                indentation are simpler than YAML: a map or a list always starts
+                on a new indented line.
+            </p>
+
+            <p>
+                In the case a key is present, but not followed by a scalar or an
+                indented map or list, it is said to have no value. This acts as
+                a default for maps and lists, and is typically an error when the
+                parser expects a scalar.
+            </p>
+
+            <pre>
+<comment>; values can be left undefined or empty
+; to request a sensible default</comment>
+<key>theme</key>
+  <comment>; background = #fff</comment>
+
+<comment>; a list of maps</comment>
+<key>hosts</key>
+  =
+    <key>hostname</key> = <value>nix1</value>
+    <key>port</key> = <value>80</value>
+  =
+    <key>hostname</key> = <value>nix2</value>
+    <key>port</key> = <value>8080</value>
+
+<comment>; a map of lists</comment>
+<key>allow_list</key>
+  <key>domains</key>
+    = <value>example.com</value>
+    = <value>example.dev</value>
+  <key>ips</key>
+    = <value>::1</value>
+</pre>
+
+            <p>
+                If you'd like to write your own CONL parser, see the
+                <a
+                    href="https://github.com/ConradIrwin/conl/tree/main/spec.conl"
+                    >spec</a
+                >.
+            </p>
+
+            <p>
+                As CONL is capable of representing a JSON document, you can use
+                JSON-Schema to validate a CONL document. There is also a nascent
+                <a
+                    href="https://github.com/ConradIrwin/conl-go/blob/main/schema/schema.go"
+                    >CONL Schema</a
+                >
+                specification.
+            </p>
+
+            <h2>Projects</h2>
+
+            <ul>
+                <li>
+                    <a href="https://github.com/ConradIrwin/conl"
+                        >Rust parser</a
+                    >
+                </li>
+                <li>
+                    <a href="https://github.com/ConradIrwin/serde_conl"
+                        >Rust serde integration</a
+                    >
+                </li>
+                <li>
+                    <a href="https://github.com/ConradIrwin/conl-go"
+                        >Go parser</a
+                    >
+                </li>
+                <li>
+                    <a href="https://github.com/ConradIrwin/tree-sitter-conl"
+                        >Tree-sitter grammar</a
+                    >
+                </li>
+                <li>
+                    <a href="https://github.com/ConradIrwin/zed-extension-conl"
+                        >Zed extension</a
+                    >
+                </li>
+            </ul>
+            <footer>
+                A project of
+                <a href="https://github.com/ConradIrwin">Conrad Irwin</a>,
+                <a href="mailto:me@cirw.in">email</a>,
+                <a href="https://twitter.com/ConradIrwin">Twitter</a>
+            </footer>
+        </content>
+    </body>
+</html>
