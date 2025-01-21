@@ -67,6 +67,11 @@
                 margin-left: var(--line-height);
                 max-width: 60ch;
             }
+            @media screen and (min-width: 800px) {
+                content {
+                    margin-left: calc((100vw - 60ch - 2rem) / 2.5);
+                }
+            }
             footer {
                 border-top: 2px solid var(--foreground);
                 margin-top: calc(var(--line-height) - 2px);
