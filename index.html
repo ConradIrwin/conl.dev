@@ -198,6 +198,10 @@
                 <nobr>easy to parse</nobr>.
             </p>
             <p>
+                It is a rebellion against complexity and a rejection of bloat; a
+                heavy dose of pragmatism with a side of minimalism.
+            </p>
+            <p>
                 CONL provides a standard data model of maps, lists and scalars;
                 uses indentation to define structure; and defers type-assignment
                 to parse time.
@@ -228,14 +232,14 @@
                 In CONL there is no special syntax for numbers or booleans.
                 Instead the parser interprets the scalar as required by the
                 context. This avoids the need for quotes around strings in TOML,
-                and the "Norway" problem in YAML. It also makes it fluent to
-                define units alongside your numbers.
+                and the "Norway" problem in YAML. It encourages adding units to
+                numbers, so that the intent is clear.
             </p>
 
             <p>
-                Scalars may be quoted, but this is discouraged and is rarely
-                needed in practice. For example the empty scalar is represented
-                as "". The quote marks do not affect the type of the scalar.
+                Scalars may be quoted, but this is rarely needed in practice.
+                For example the empty scalar is represented as "". The quote
+                marks do not affect the type of the scalar.
             </p>
 
             <pre>
