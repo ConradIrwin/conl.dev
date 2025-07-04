@@ -1,0 +1,463 @@
+<!doctype html>
+<meta charset="UTF-8" />
+<html>
+    <head>
+        <title>CONL Schema</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <style>
+            @font-face {
+                font-family: "IBM Plex Mono";
+                src: url("./fonts/IBMPlexMono-Regular.ttf") format("truetype");
+                font-weight: normal;
+                font-style: normal;
+                size-adjust: 91%;
+            }
+            @font-face {
+                font-family: "IBM Plex Sans";
+                src: url("./fonts/IBMPlexSans-Regular.ttf") format("truetype");
+                font-weight: normal;
+                font-style: normal;
+            }
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+            html {
+                font-size: 18px;
+                font-family: sans-serif;
+                --line-height: 1.4rem;
+                --foreground: #130d02;
+                --background: #ffffff;
+            }
+            @media (prefers-color-scheme: dark) {
+                html {
+                    --foreground: #c3cdc2;
+                    --background: #151312;
+                }
+            }
+
+            body {
+                color: var(--foreground);
+                background-color: var(--background);
+
+                font-family: "IBM Plex Sans", sans-serif;
+                background-image: linear-gradient(
+                        to bottom,
+                        rgba(0, 0, 0, 0.1) 0%,
+                        rgba(0, 0, 0, 0.1) 1px,
+                        transparent 1px
+                    ),
+                    linear-gradient(
+                        to right,
+                        rgba(0, 0, 0, 0.1) 0%,
+                        rgba(0, 0, 0, 0.1) 1px,
+                        transparent 1px
+                    );
+                background-size: calc(var(--line-height) / 2)
+                    calc(var(--line-height) / 2);
+                background-position: 4px 4px;
+            }
+            svg path {
+                fill: var(--foreground);
+            }
+            content {
+                display: block;
+                padding-top: calc(var(--line-height) * 2);
+                margin-left: var(--line-height);
+                max-width: 60ch;
+            }
+            @media screen and (min-width: 800px) {
+                content {
+                    margin-left: calc((100vw - 60ch - 2rem) / 2.5);
+                }
+            }
+            footer {
+                border-top: 2px solid var(--foreground);
+                margin-top: calc(var(--line-height) - 2px);
+                text-align: center;
+                font-size: 0.8rem;
+                padding-bottom: calc(var(--line-height) * 2);
+            }
+            p,
+            pre,
+            ul,
+            footer,
+            h2, h3 {
+                padding-left: 1rem;
+                padding-top: calc((var(--line-height) - 1cap) / 2);
+                padding-bottom: calc(
+                    var(--line-height) / 2 - ((var(--line-height) - 1cap) / 2)
+                );
+                line-height: var(--line-height);
+                letter-spacing: 0.02em;
+                overflow-x: auto;
+            }
+            h1 {
+                font-family: "IBM Plex Mono", monospace;
+                height: calc(2px + var(--line-height) * 2);
+                padding-left: calc(1rem - 1px);
+                padding-top: calc(2px + (var(--line-height) - 1cap) / 2);
+                margin-bottom: calc(0px - ((var(--line-height) - 1cap) / 2));
+                font-size: 2rem;
+
+                border-top: 2px solid var(--foreground);
+                margin-top: -2px;
+            }
+            h1 a {
+                float: right;
+                padding-right: 2px;
+            }
+            h2 {
+                font-family: "IBM Plex Mono", monospace;
+                font-size: 1.5rem;
+                padding-top: calc(
+                    var(--line-height) + (var(--line-height) - 1cap) / 2
+                );
+                padding-bottom: calc(
+                    var(--line-height) - ((var(--line-height) - 1cap) / 2)
+                );
+            }
+            h3 {
+                font-family: "IBM Plex Mono", monospace;
+                font-size: 1.2rem;
+                padding-top: calc(
+                    var(--line-height) + (var(--line-height) - 1cap) / 2
+                );
+                padding-bottom: calc(
+                    var(--line-height) - ((var(--line-height) - 1cap) / 2)
+                );
+            }
+            a {
+                color: #32b1d7;
+                text-decoration: none;
+            }
+            pre::before {
+                content: "";
+                position: absolute;
+                height: calc(100% - var(--line-height) + 2px);
+                top: calc(var(--line-height) / 2);
+                left: 0px;
+                border-left: 2px solid #32b1d7;
+            }
+            pre {
+                position: relative;
+                font-family: "IBM Plex Mono", monospace;
+                letter-spacing: initial;
+                padding-left: 1rem;
+                /* margin-bottom: calc(var(--line-height) / 2); */
+                /* margin-top: calc(var(--line-height) / 2); */
+                width: 45ch;
+            }
+            ul {
+                /* margin-top: calc(0rem - var(--line-height)); */
+                list-style: none;
+            }
+            li {
+                position: relative;
+                padding-left: 1.2rem;
+                margin-top: calc(var(--line-height) / 2);
+            }
+            ul li::before {
+                content: "=";
+                font-family: "IBM Plex Mono", monospace;
+                font-size: 1em;
+                position: absolute;
+                left: 0;
+                top: -1px;
+                font-size: 1.2em;
+            }
+
+            comment {
+                color: #888;
+            }
+            escape {
+                color: #d6a23f;
+            }
+            key {
+                color: #a460cc;
+            }
+            value {
+                color: #61a834;
+            }
+        </style>
+    </head>
+    <body>
+        <content>
+            <h1 id="conl">CONL Schema v1.0</h1>
+            <p>
+                A CONL schema provides validation and auto-completion for
+                <a href="https://conl.dev">CONL documents</a>.
+            </p>
+            <p>
+                It embeds the philosophy of CONL: post-minimal, easy to
+                read, easy to edit, and easy to parse.
+            </p>
+            <p>
+                A CONL schema is itself a CONL document with two
+                top-level keys. <code><key>definitions</key></code> is a map of named
+                definitions, and <code><key>root</key></code> names the definition that
+                should be at the root of the document.
+            </p>
+            <p>For example:</p>
+            <pre><key>root</key> = <value>&lt;<escape>server</escape>&gt;</value>
+<key>definitions</key>
+  <escape>server</escape>
+    <key>required keys</key>
+      <value>type</value> = <value>server</value>
+    <key>keys</key>
+      <value>listen</value> = <value>&lt;<escape>addr</escape>&gt;</value>
+
+  <escape>addr</escape>
+    <key>keys</key>
+      <value>host</value> = <value>.*</value>
+      <value>port</value> = <value>\d+</value>
+</pre>
+            <p>Matches the CONL document:</p>
+            <pre><key>type</key> = <value>server</value>
+<key>listen</key>
+  <key>host</key> = <value>localhost</value>
+  <key>port</key> = <value>8080</value>
+</pre>
+            <p>
+                The expressivity of a CONL schema roughly matches that of a
+                regular expression. If you pair it with an re2 based
+                regular expression engine, you can avoid the
+                <a
+                    href="https://json-schema.org/understanding-json-schema/reference/combining#introduction"
+                    >exponential matching time</a
+                >
+                possible with JSON-schema.
+            </p>
+            <h3 id="definitions">Definitions</h1>
+            <p>There are four kinds of definition:</p>
+            <ul>
+                <li>
+                    To match a map (with <key>required keys</key> and/or
+                    <key>keys</key>)
+                </li>
+                <li>
+                    To match a list (with <key>required items</key> and/or <key>items</key>)
+                </li>
+                <li>To match a scalar (with <key>scalar</key>)</li>
+                <li>To match a mix (with <key>any of</key>)</li>
+            </ul>
+            <h3 id="scalar">Scalar</h3>
+            <p>
+                A scalar definition requires that the value is a scalar, and
+                it is matched by the  given matcher.
+            </p>
+            <pre><key>definitions</key>
+  <escape>example</escape>
+    <key>scalar</key> = <comment>[[matcher]]</comment>
+</pre>
+            <h3 id="any-of">Any of</h2>
+            <p>
+                An any of definition requires that the value matches one (or more) of the
+                given matchers.
+            </p>
+            <pre><key>definitions</key>
+  <escape>example</escape>
+    <key>any of</key>
+      = <comment>[[matcher]]</comment>
+      = <comment>[[matcher]]</comment>
+      = <comment>...</comment>
+</pre>
+            <h3 id="list">List</h2>
+            <p>
+                A list definition requires that the value is a list.
+            </p>
+            <p>
+                Specifying <key>required items</key> allows you to match a tuple of a fixed length where different positions have different types. Each value in the list must match the corresponding matcher.
+            </p><p>
+                Specifying <key>items</key> matches a list of arbitrary length where values are of the same type. Every item in the list must match the matcher.
+            </p><p>
+                Specifying both lets you require a prefix that matches the required items, followed by any number of values that match the items matcher.
+            </p>
+            <pre><key>definitions</key>
+  <escape>example</escape>
+    <key>required items</key>
+      = <comment>[[matcher]]</comment>
+      = <comment>[[matcher]]</comment>
+      = <comment>...</comment>
+    <key>items</key> = <comment>[[matcher]]</comment>
+</pre>
+            <h3 id="map">Map</h2>
+            <p>
+                A map definition requires that the value is a map.
+                As in CONL, each key in the map must be unique.
+            </p><p>
+                If <key>required keys</key> are specified, then the value must contain exactly one key-value pair that
+                matches every required key-value pair.
+            </p><p>
+                If <key>keys</key> are specified, then the value may contain any number (including zero) key-value pairs
+                that match the key-value pairs.
+            </p>
+            <p>The value cannot contain any keys that are not present in either. If there are no required keys, then the value may be empty.</p>
+            <pre><key>definitions</key>
+  <escape>example</escape>
+    <key>keys</key>
+      <comment>[[matcher]]</comment> = <comment>[[matcher]]</comment>
+      <comment>[[matcher]]</comment> = <comment>[[matcher]]</comment>
+      <comment>...</comment>
+    <key>required keys</key>
+      <comment>[[matcher]]</comment> = <comment>[[matcher]]</comment>
+      <comment>[[matcher]]</comment> = <comment>[[matcher]]</comment>
+      <comment>...</comment>
+</pre>
+            <p>
+                It is worth calling out that matching considers both the key and the values.
+                This lets you (in combination with an <a href="#any-of">any of</a> definition) match multiple
+                different types of value in the same position.
+            </p>
+            <pre><key>definitions</key>
+  <escape>example</escape>
+    <key>any of</key>
+      = <value>&lt;<escape>server</escape>&gt;</value>
+      = <value>&lt;<escape>client</escape>&gt;</value>
+
+  <escape>server</escape>
+    <key>required keys</key>
+      <value>type</value> = <value>server</value>
+    <key>keys</key>
+      <value>...</value>
+
+  <escape>client</escape>
+    <key>required keys</key>
+      <value>type</value> = <value>client</value>
+    <key>keys</key>
+      <value>...</value>
+</pre>
+            <h2 id="matchers">Matchers</h1>
+            <p>
+                A matcher describes how a value should be matched. There are two
+                possible kinds of matcher: references (<value>&lt;<escape>.*</escape>&gt;</value>) refer to other definitions,
+                and patterns (regular expressions) which match scalars and map keys.
+            </p>
+            <p>
+                A matcher is typically represented as a CONL scalar, but it can also be paired with
+                markdown documentation, in which case it is expressed as a CONL map with the <key>matches</key>
+                and a <key>documentation</key>.
+            </p>
+            <pre><comment>; matches any scalar value</comment>
+<key>definitions</key>
+  <escape>example</escape>
+    <key>scalar</key> = <value>.*</value>
+
+<comment>; equivalent to the above, but with docs</comment>
+<key>definitions</key>
+  <escape>example</escape>
+    <key>scalar</key>
+      <key>matches</key> = <value>.*</value>
+      <key>docs</key> = <value>"""markdown
+        Matches any scalar</value>
+</pre>
+            <h3 id="references">References</h2>
+            <p>
+                If the matcher starts with an <code>&lt;</code> and ends with
+                <code>&gt;</code> it references an existing definition.
+            </p>
+            <pre><key>definitions</key>
+  <escape>example</escape>
+    <key>required keys</key>
+      <value>mode</value> = <value>&lt;<escape>mode</escape>&gt;</value>
+
+  <escape>mode</escape>
+    <key>one of</key>
+      = <value>server</value>
+      = <value>client</value>
+</pre>
+            <p>
+                This allows the example’s mode key to be set to either
+                <value>server</value> or <value>client</value> (which are themselves
+                pattern matchers).
+            </p>
+            <p>
+                While it is possible to use this to build up recursive structures
+                (where a map can have values that are the same type). It is an error
+                to set up a cyclical definition where one definition is defined in terms
+                of itself, for example:
+            </p>
+            <pre><key>definitions</key> <comment>; invalid schema</comment>
+  <escape>a</escape>
+    <key>scalar</key> = <value>&lt;<escape>b</escape>&gt;</value>
+  <escape>b</escape>
+    <key>one of</key> = <value>&lt;<escape>a</escape>&gt;</value>
+</pre>
+            <h3 id="patterns">Patterns</h2>
+            <p>
+                Patterns in CONL are regular expressions. The exact syntax is implementation defined,
+                but all validators should ensure that the pattern is anchored, and that `.` matches
+                any unicode code-point (including <code>\n</code>). For example:
+            </p>
+            <pre><key>definitions</key>
+  <escape>example</escape>
+    <key>any of</key>
+      = <value>one</value>      <comment>; "one" (not "done")</comment>
+      = <value>(?i)two</value>  <comment>; two, Two, TWO, etc.</comment>
+      = <value>.*</value>       <comment>; "", "a\nb", etc.</comment>
+      = <value>[^\r\n]+</value> <comment>; "any one-line scalar"</comment>
+</pre>
+            <p>
+                Currently the exact details of regular expression matching are
+                implementation defined (to make it easy to use different
+                regex engines as a schema implementor).
+                It is recommended to stick to the basics when it comes to regular expressions to ensure your schemas work with future validators that use different regex engines.
+                The reference implementation
+                uses Go's <a href="https://pkg.go.dev/regexp/syntax">regexp</a> package.
+            </p>
+            <p>
+                It is also worth noting that while CONL has three ways to represent scalars,
+                they are not distinguishable. A matcher that matches the string <value>one</value>
+                will match all of these equivalently:
+            </p>
+            <pre>= <value>one</value>
+= <value>"one"</value>
+= <value>"""markdown
+  one</value>
+</pre>
+<h2>Future extensions</h2>
+
+<p>
+    CONL schema may evolve over the future to support features beyond just validating the struture of the document. For example
+    it might be useful to know if a scalar should be represented in JSON as a string or a number; or whether certain values or keys are deprecated.
+    As such, CONL schema parsers should not error if they encounter unknown keys in maps representing matchers.
+</p>
+
+<p>
+    We do not expect to make changes that would cause validators to be unable to validate existing schemas.
+</p>
+
+<h2>Projects</h2>
+
+<ul>
+    <li>
+        <a href="https://conl.dev/schemas/schema.conl"
+            >schema.conl</a
+        > to validate CONL schema
+    </li>
+    <li>
+        <a href="https://github.com/ConradIrwin/conl-go"
+            >Reference implementation</a
+        >
+    </li>
+    <li>
+        <a href="https://github.com/ConradIrwin/conl-lsp"
+            >Language server, which uses CONL schema for validation and autocomplete.</a
+        >
+    </li>
+    <li>
+        <a href="https://github.com/ConradIrwin/zed-extension-conl"
+            >Zed extension using the </a
+        >
+    </li>
+</ul>
+<footer>
+    A project of
+    <a href="https://github.com/ConradIrwin">Conrad Irwin</a>,
+    <a href="mailto:me@cirw.in">email</a>,
+    <a href="https://twitter.com/ConradIrwin">Twitter</a>
+</footer>
+        </content>
+    </body>
+</html>

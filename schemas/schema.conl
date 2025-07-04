@@ -1,4 +1,4 @@
-; A CONL schema describes a set of CONL documents.
+; A CONL schema defines a set of CONL documents.
 ;
 ; This schema describes valid schemas (including itself!).
 ;
@@ -8,11 +8,11 @@ definitions
   schema
     required keys
       root
-        matches = <matcher>
-        docs = The definition to match against the root of the document.
+        matches = (<.*>)
+        docs = The definition that should match the root of the document
       definitions
         matches = <definitions>
-        docs = All definitions which make up the schema.
+        docs = All definitions which make up the schema
     keys
       schema
         matches = .*
@@ -26,11 +26,11 @@ definitions
       .* = <definition>
 
   definition
-    one of
+    any of
       = <scalar>
       = <map>
       = <list>
-      = <one of>
+      = <any of>
 
   scalar
     keys
@@ -39,9 +39,9 @@ definitions
         docs = """markdown
           Matches scalar values.
 
-  one of
+  any of
     required keys
-      one of
+      any of
         matches = <matcher list>
         docs = Matches all values that match any of the given matchers.
 
@@ -75,7 +75,7 @@ definitions
         docs = """markdown
           Matches maps where every key-value pair matches the given matcher.
 
-          Unless `required keys` is also set, this matches empty maps.
+          Unless `required keys` is set, this matches empty maps.
 
   value matcher
     scalar
@@ -94,10 +94,10 @@ definitions
       docs
         matches = .*
         docs = """markdown
-         Documentation for this matcher. This is assumed to be Markdown.
+          Documentation for this matcher. This is assumed to be Markdown.
 
   matcher
-    one of
+    any of
       = <value matcher>
       = <documented matcher>
 
