@@ -388,8 +388,8 @@
 </pre>
             <h3 id="patterns">Patterns</h2>
             <p>
-                Patterns in CONL are regular expressions. The exact syntax is implementation defined,
-                but all validators should ensure that the pattern is anchored, and that `.` matches
+                Patterns in CONL are regular expressions. To make it possible to match strings
+                easily, the pattern must match the entire value, and `.` matches
                 any unicode code-point (including <code>\n</code>). For example:
             </p>
             <pre><key>definitions</key>
